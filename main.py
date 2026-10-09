@@ -1,5 +1,6 @@
 
 import tkinter as tk
+import tkinter.font as tkfont
 from tkinter import ttk, scrolledtext
 
 # Basic chatbot responses
@@ -158,6 +159,15 @@ root.geometry("800x650")
 root.minsize(650, 500)
 root.configure(bg="#f1f5f9")
 
+# Set a font that can display Sinhala characters
+default_font = tkfont.nametofont("TkDefaultFont")
+default_font.configure(family="Nirmala UI", size=10)
+
+text_font = tkfont.Font(
+    family="Nirmala UI",
+    size=11
+)
+
 # Home screen
 home_frame = tk.Frame(root, bg="#f1f5f9")
 home_frame.pack(fill="both", expand=True)
@@ -301,13 +311,14 @@ tk.Button(
 chat_area = scrolledtext.ScrolledText(
     chat_frame,
     wrap=tk.WORD,
-    font=("Segoe UI", 11),
+    font=("Nirmala UI", 12),
     bg="white",
     fg="#172033",
     padx=12,
     pady=12,
     state="disabled"
 )
+
 chat_area.pack(fill="both", expand=True, padx=18, pady=15)
 
 input_frame = tk.Frame(chat_frame, bg="#f1f5f9")
@@ -315,8 +326,9 @@ input_frame.pack(fill="x", padx=18, pady=(0, 18))
 
 message_entry = tk.Entry(
     input_frame,
-    font=("Segoe UI", 11)
+    font=("Nirmala UI", 12)
 )
+
 message_entry.pack(
     side="left",
     fill="x",
