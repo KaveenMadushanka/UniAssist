@@ -3,104 +3,7 @@ import tkinter as tk
 import tkinter.font as tkfont
 from tkinter import ttk, scrolledtext
 
-
-# -------------------- Chatbot Responses --------------------
-
-def get_response(message, student_type, university):
-    text = message.strip().lower()
-
-    if any(word in text for word in [
-        "hello", "hi", "hey", "හෙලෝ", "ආයුබෝවන්"
-    ]):
-        return (
-            "Hello! Welcome to UniAssist. How can I help you?\n"
-            "ආයුබෝවන්! UniAssist වෙත සාදරයෙන් පිළිගන්නවා."
-        )
-
-    # A/L student questions
-    if student_type == "A/L Student":
-
-        if any(word in text for word in [
-            "z-score", "z score", "zscore", "z-score එක"
-        ]):
-            return (
-                "A Z-score is used in Sri Lankan university admission "
-                "to compare examination performance. Admission cut-offs "
-                "depend on the course, district and admission year. "
-                "Please check the latest official UGC handbook.\n\n"
-                "Z-score එක විශ්වවිද්‍යාල ප්‍රවේශයේදී භාවිතා කරන "
-                "ලකුණක්. Cut-off අගයන් පාඨමාලාව, දිස්ත්‍රික්කය සහ "
-                "වර්ෂය අනුව වෙනස් වෙනවා. නවතම UGC තොරතුරු බලන්න."
-            )
-
-        if any(word in text for word in [
-            "degree", "course", "උපාධි", "පාඨමාලා"
-        ]):
-            return (
-                "You can explore degrees in IT, Computer Science, "
-                "Engineering, Management, Science and other fields. "
-                "Your eligible options depend on your A/L subjects "
-                "and official admission rules.\n\n"
-                "ඔබගේ A/L විෂයන් අනුව ලබාගත හැකි උපාධි වෙනස් වෙනවා. "
-                "සුදුසුකම් සඳහා නවතම UGC handbook එක බලන්න."
-            )
-
-        if any(word in text for word in [
-            "admission", "apply", "university",
-            "ඇතුළත්", "විශ්වවිද්‍යාලයට", "අයදුම්"
-        ]):
-            return (
-                "University admission requirements and application "
-                "dates can change. Check the official UGC website:\n"
-                "https://www.ugc.ac.lk/\n\n"
-                "විශ්වවිද්‍යාල ප්‍රවේශය සහ අයදුම් කරන දින වෙනස් "
-                "විය හැකියි. UGC නිල වෙබ් අඩවිය පරීක්ෂා කරන්න."
-            )
-
-    # Current university student questions
-    if student_type == "University Student":
-
-        if "gpa" in text:
-            return (
-                "GPA is usually calculated using course grade points "
-                "and credits. The exact method depends on your university.\n\n"
-                "GPA ගණනය කිරීමේදී grades සහ credits භාවිතා කරනවා. "
-                "නිශ්චිත ක්‍රමය ඔබගේ university එක අනුව වෙනස් විය හැකියි."
-            )
-
-        if any(word in text for word in [
-            "exam", "assignment", "විභාග", "පැවරුම්"
-        ]):
-            return (
-                "Check your university LMS, course outline or official "
-                "announcements for exam dates and assignment deadlines.\n\n"
-                "විභාග දින සහ assignment deadlines සඳහා university "
-                "LMS එක හෝ නිල නිවේදන පරීක්ෂා කරන්න."
-            )
-
-    # General questions
-    if any(word in text for word in [
-        "scholarship", "ශිෂ්‍යත්ව"
-    ]):
-        return (
-            "Scholarship availability and eligibility vary. Check "
-            "official university announcements and relevant student "
-            "support information.\n\n"
-            "ශිෂ්‍යත්ව සඳහා සුදුසුකම් සහ අවස්ථා වෙනස් වෙනවා. "
-            "විශ්වවිද්‍යාලයේ නිල නිවේදන පරීක්ෂා කරන්න."
-        )
-
-    if any(word in text for word in [
-        "thank", "ස්තුතියි", "ස්තූතියි"
-    ]):
-        return "You're welcome! / ඔබට උදව් කිරීමට සතුටුයි!"
-
-    return (
-        "Sorry, I don't have a verified answer for that question yet. "
-        "Please try another question or check an official source.\n\n"
-        "සමාවන්න, මේ ප්‍රශ්නයට තහවුරු කළ පිළිතුරක් තවම නැහැ. "
-        "ප්‍රශ්නය වෙනත් ආකාරයකින් අහන්න හෝ නිල මූලාශ්‍රයක් බලන්න."
-    )
+from chatbot import get_response
 
 
 # -------------------- Chat Functions --------------------
@@ -115,6 +18,8 @@ def open_chat():
         )
         return
 
+    status_label.config(text="")
+
     home_frame.pack_forget()
     chat_frame.pack(fill="both", expand=True)
 
@@ -128,35 +33,58 @@ def open_chat():
     )
     chat_area.config(state="disabled")
     chat_area.see(tk.END)
+
     message_entry.focus_set()
 
 
 def send_message(event=None):
-    # Read text without the automatic final newline
+    # Read the message without the final newline
     message = message_entry.get("1.0", "end-1c").strip()
 
     if not message:
-        return "break" if event else None
+        if event:
+            return "break"
+        return
 
+    # Display the user's message
     chat_area.config(state="normal")
     chat_area.insert(tk.END, f"You: {message}\n\n")
 
-    response = get_response(
-        message,
-        category.get(),
-        university_choice.get()
-    )
+    # Get a response from chatbot.py
+    try:
+        response = get_response(
+            message,
+            category.get(),
+            university_choice.get()
+        )
+    except Exception as error:
+        print("Chatbot error:", error)
+        response = (
+            "Sorry, something went wrong while finding an answer.\n\n"
+            "සමාවන්න, පිළිතුර ලබාගැනීමේදී දෝෂයක් ඇති වුණා."
+        )
 
-    chat_area.insert(tk.END, f"UniAssist: {response}\n\n")
+    # Display the chatbot response
+    chat_area.insert(
+        tk.END,
+        f"UniAssist: {response}\n\n"
+    )
     chat_area.config(state="disabled")
     chat_area.see(tk.END)
 
+    # Clear the input box
     message_entry.delete("1.0", tk.END)
     message_entry.focus_set()
 
-    # Prevent Ctrl+Enter from adding a new line
+    # Prevent Enter from inserting an extra newline
     if event:
         return "break"
+
+
+def insert_newline(event):
+    # Shift + Enter inserts a new line
+    message_entry.insert(tk.INSERT, "\n")
+    return "break"
 
 
 def go_home():
@@ -174,7 +102,10 @@ root.configure(bg="#f1f5f9")
 
 # Set default font
 default_font = tkfont.nametofont("TkDefaultFont")
-default_font.configure(family="Nirmala UI", size=10)
+default_font.configure(
+    family="Nirmala UI",
+    size=10
+)
 
 # Set text font
 text_font = tkfont.Font(
@@ -186,7 +117,10 @@ text_font = tkfont.Font(
 
 # -------------------- Home Screen --------------------
 
-home_frame = tk.Frame(root, bg="#f1f5f9")
+home_frame = tk.Frame(
+    root,
+    bg="#f1f5f9"
+)
 home_frame.pack(fill="both", expand=True)
 
 tk.Label(
@@ -221,7 +155,9 @@ tk.Label(
     fg="#17365d"
 ).pack()
 
-category = tk.StringVar(value="A/L Student")
+category = tk.StringVar(
+    value="A/L Student"
+)
 
 tk.Radiobutton(
     home_frame,
@@ -281,7 +217,10 @@ university_box.pack(pady=5)
 
 tk.Label(
     home_frame,
-    text="Campus-specific information will be added after verification.",
+    text=(
+        "Campus-specific information will be added "
+        "after verification."
+    ),
     font=("Segoe UI", 9),
     bg="#f1f5f9",
     fg="#64748b"
@@ -309,9 +248,15 @@ tk.Button(
 
 # -------------------- Chat Screen --------------------
 
-chat_frame = tk.Frame(root, bg="#f1f5f9")
+chat_frame = tk.Frame(
+    root,
+    bg="#f1f5f9"
+)
 
-chat_header = tk.Frame(chat_frame, bg="#17365d")
+chat_header = tk.Frame(
+    chat_frame,
+    bg="#17365d"
+)
 chat_header.pack(fill="x")
 
 tk.Label(
@@ -338,6 +283,7 @@ chat_area = scrolledtext.ScrolledText(
     pady=12,
     state="disabled"
 )
+
 chat_area.pack(
     fill="both",
     expand=True,
@@ -345,14 +291,20 @@ chat_area.pack(
     pady=15
 )
 
-input_frame = tk.Frame(chat_frame, bg="#f1f5f9")
+
+# -------------------- Message Input --------------------
+
+input_frame = tk.Frame(
+    chat_frame,
+    bg="#f1f5f9"
+)
+
 input_frame.pack(
     fill="x",
     padx=18,
     pady=(0, 18)
 )
 
-# Text widget instead of Entry
 message_entry = tk.Text(
     input_frame,
     font=text_font,
@@ -362,6 +314,7 @@ message_entry = tk.Text(
     padx=8,
     pady=6
 )
+
 message_entry.pack(
     side="left",
     fill="x",
@@ -369,16 +322,17 @@ message_entry.pack(
     padx=(0, 8)
 )
 
-
 # Enter sends the message
-message_entry.bind("<Return>", send_message)
+message_entry.bind(
+    "<Return>",
+    send_message
+)
 
 # Shift + Enter inserts a new line
 message_entry.bind(
     "<Shift-Return>",
-    lambda event: None
+    insert_newline
 )
-
 
 tk.Button(
     input_frame,
@@ -390,5 +344,8 @@ tk.Button(
     padx=20,
     pady=8
 ).pack(side="left")
+
+
+# -------------------- Run Application --------------------
 
 root.mainloop()
