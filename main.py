@@ -369,11 +369,16 @@ message_entry.pack(
     padx=(0, 8)
 )
 
-# Ctrl + Enter sends the message
+
+# Enter sends the message
+message_entry.bind("<Return>", send_message)
+
+# Shift + Enter inserts a new line
 message_entry.bind(
-    "<Control-Return>",
-    send_message
+    "<Shift-Return>",
+    lambda event: None
 )
+
 
 tk.Button(
     input_frame,
