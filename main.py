@@ -3,11 +3,12 @@ import tkinter as tk
 import tkinter.font as tkfont
 from tkinter import ttk, scrolledtext
 
-# Basic chatbot responses
-def get_response(message, student_type, university):
-    text = message.lower().strip()
 
-    # Greetings
+# -------------------- Chatbot Responses --------------------
+
+def get_response(message, student_type, university):
+    text = message.strip().lower()
+
     if any(word in text for word in [
         "hello", "hi", "hey", "හෙලෝ", "ආයුබෝවන්"
     ]):
@@ -16,10 +17,11 @@ def get_response(message, student_type, university):
             "ආයුබෝවන්! UniAssist වෙත සාදරයෙන් පිළිගන්නවා."
         )
 
-    # A/L and admission questions
+    # A/L student questions
     if student_type == "A/L Student":
+
         if any(word in text for word in [
-            "z-score", "z score", "zscore"
+            "z-score", "z score", "zscore", "z-score එක"
         ]):
             return (
                 "A Z-score is used in Sri Lankan university admission "
@@ -27,8 +29,8 @@ def get_response(message, student_type, university):
                 "depend on the course, district and admission year. "
                 "Please check the latest official UGC handbook.\n\n"
                 "Z-score එක විශ්වවිද්‍යාල ප්‍රවේශයේදී භාවිතා කරන "
-                "ලකුණක්. අවශ්‍ය cut-off අගයන් පාඨමාලාව, දිස්ත්‍රික්කය "
-                "සහ වර්ෂය අනුව වෙනස් වෙනවා. නවතම UGC නිල තොරතුරු බලන්න."
+                "ලකුණක්. Cut-off අගයන් පාඨමාලාව, දිස්ත්‍රික්කය සහ "
+                "වර්ෂය අනුව වෙනස් වෙනවා. නවතම UGC තොරතුරු බලන්න."
             )
 
         if any(word in text for word in [
@@ -38,25 +40,26 @@ def get_response(message, student_type, university):
                 "You can explore degrees in IT, Computer Science, "
                 "Engineering, Management, Science and other fields. "
                 "Your eligible options depend on your A/L subjects "
-                "and the official admission rules.\n\n"
+                "and official admission rules.\n\n"
                 "ඔබගේ A/L විෂයන් අනුව ලබාගත හැකි උපාධි වෙනස් වෙනවා. "
                 "සුදුසුකම් සඳහා නවතම UGC handbook එක බලන්න."
             )
 
         if any(word in text for word in [
-            "admission", "apply", "university", "ඇතුළත්",
-            "විශ්වවිද්‍යාලයට", "අයදුම්"
+            "admission", "apply", "university",
+            "ඇතුළත්", "විශ්වවිද්‍යාලයට", "අයදුම්"
         ]):
             return (
                 "University admission requirements and application "
-                "dates can change. Please check the official UGC "
-                "website: https://www.ugc.ac.lk/\n\n"
+                "dates can change. Check the official UGC website:\n"
+                "https://www.ugc.ac.lk/\n\n"
                 "විශ්වවිද්‍යාල ප්‍රවේශය සහ අයදුම් කරන දින වෙනස් "
                 "විය හැකියි. UGC නිල වෙබ් අඩවිය පරීක්ෂා කරන්න."
             )
 
     # Current university student questions
     if student_type == "University Student":
+
         if "gpa" in text:
             return (
                 "GPA is usually calculated using course grade points "
@@ -81,8 +84,8 @@ def get_response(message, student_type, university):
     ]):
         return (
             "Scholarship availability and eligibility vary. Check "
-            "official university announcements and relevant government "
-            "student support information.\n\n"
+            "official university announcements and relevant student "
+            "support information.\n\n"
             "ශිෂ්‍යත්ව සඳහා සුදුසුකම් සහ අවස්ථා වෙනස් වෙනවා. "
             "විශ්වවිද්‍යාලයේ නිල නිවේදන පරීක්ෂා කරන්න."
         )
@@ -100,13 +103,16 @@ def get_response(message, student_type, university):
     )
 
 
-# Open the chat window
+# -------------------- Chat Functions --------------------
+
 def open_chat():
     student_type = category.get()
     university = university_choice.get()
 
     if not student_type:
-        status_label.config(text="Please select your student category.")
+        status_label.config(
+            text="Please select your student category."
+        )
         return
 
     home_frame.pack_forget()
@@ -121,17 +127,19 @@ def open_chat():
         "ඔබගේ ප්‍රශ්නය English හෝ සිංහලෙන් අහන්න.\n\n"
     )
     chat_area.config(state="disabled")
+    chat_area.see(tk.END)
+    message_entry.focus_set()
 
 
-# Send a message
 def send_message(event=None):
-    message = message_entry.get().strip()
+    # Read text without the automatic final newline
+    message = message_entry.get("1.0", "end-1c").strip()
 
     if not message:
-        return
+        return "break" if event else None
 
     chat_area.config(state="normal")
-    chat_area.insert(tk.END, f"You: {message}\n")
+    chat_area.insert(tk.END, f"You: {message}\n\n")
 
     response = get_response(
         message,
@@ -143,32 +151,41 @@ def send_message(event=None):
     chat_area.config(state="disabled")
     chat_area.see(tk.END)
 
-    message_entry.delete(0, tk.END)
+    message_entry.delete("1.0", tk.END)
+    message_entry.focus_set()
+
+    # Prevent Ctrl+Enter from adding a new line
+    if event:
+        return "break"
 
 
-# Return to the home screen
 def go_home():
     chat_frame.pack_forget()
     home_frame.pack(fill="both", expand=True)
 
 
-# Main application window
+# -------------------- Main Window --------------------
+
 root = tk.Tk()
 root.title("UniAssist - Student Support Chatbot")
 root.geometry("800x650")
 root.minsize(650, 500)
 root.configure(bg="#f1f5f9")
 
-# Set a font that can display Sinhala characters
+# Set default font
 default_font = tkfont.nametofont("TkDefaultFont")
 default_font.configure(family="Nirmala UI", size=10)
 
+# Set text font
 text_font = tkfont.Font(
+    root=root,
     family="Nirmala UI",
-    size=11
+    size=12
 )
 
-# Home screen
+
+# -------------------- Home Screen --------------------
+
 home_frame = tk.Frame(root, bg="#f1f5f9")
 home_frame.pack(fill="both", expand=True)
 
@@ -191,7 +208,7 @@ tk.Label(
 tk.Label(
     home_frame,
     text="සිංහල සහ English භාෂා දෙකෙන්ම ප්‍රශ්න අහන්න",
-    font=("Segoe UI", 11),
+    font=text_font,
     bg="#f1f5f9",
     fg="#475569"
 ).pack(pady=(5, 25))
@@ -240,7 +257,9 @@ tk.Label(
     bg="#f1f5f9"
 ).pack(pady=(20, 5))
 
-university_choice = tk.StringVar(value="General / Any University")
+university_choice = tk.StringVar(
+    value="General / Any University"
+)
 
 university_list = [
     "General / Any University",
@@ -268,6 +287,14 @@ tk.Label(
     fg="#64748b"
 ).pack(pady=5)
 
+status_label = tk.Label(
+    home_frame,
+    text="",
+    bg="#f1f5f9",
+    fg="red"
+)
+status_label.pack()
+
 tk.Button(
     home_frame,
     text="Start Chatting",
@@ -279,16 +306,9 @@ tk.Button(
     pady=10
 ).pack(pady=22)
 
-status_label = tk.Label(
-    home_frame,
-    text="",
-    bg="#f1f5f9",
-    fg="red"
-)
-status_label.pack()
 
+# -------------------- Chat Screen --------------------
 
-# Chat screen
 chat_frame = tk.Frame(root, bg="#f1f5f9")
 
 chat_header = tk.Frame(chat_frame, bg="#17365d")
@@ -311,31 +331,49 @@ tk.Button(
 chat_area = scrolledtext.ScrolledText(
     chat_frame,
     wrap=tk.WORD,
-    font=("Nirmala UI", 12),
+    font=text_font,
     bg="white",
     fg="#172033",
     padx=12,
     pady=12,
     state="disabled"
 )
-
-chat_area.pack(fill="both", expand=True, padx=18, pady=15)
-
-input_frame = tk.Frame(chat_frame, bg="#f1f5f9")
-input_frame.pack(fill="x", padx=18, pady=(0, 18))
-
-message_entry = tk.Entry(
-    input_frame,
-    font=("Nirmala UI", 12)
+chat_area.pack(
+    fill="both",
+    expand=True,
+    padx=18,
+    pady=15
 )
 
+input_frame = tk.Frame(chat_frame, bg="#f1f5f9")
+input_frame.pack(
+    fill="x",
+    padx=18,
+    pady=(0, 18)
+)
+
+# Text widget instead of Entry
+message_entry = tk.Text(
+    input_frame,
+    font=text_font,
+    height=2,
+    wrap=tk.WORD,
+    undo=True,
+    padx=8,
+    pady=6
+)
 message_entry.pack(
     side="left",
     fill="x",
     expand=True,
-    ipady=10
+    padx=(0, 8)
 )
-message_entry.bind("<Return>", send_message)
+
+# Ctrl + Enter sends the message
+message_entry.bind(
+    "<Control-Return>",
+    send_message
+)
 
 tk.Button(
     input_frame,
@@ -346,6 +384,6 @@ tk.Button(
     font=("Segoe UI", 10, "bold"),
     padx=20,
     pady=8
-).pack(side="left", padx=(8, 0))
+).pack(side="left")
 
 root.mainloop()
