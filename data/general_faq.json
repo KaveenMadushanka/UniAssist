@@ -1,0 +1,59 @@
+
+{
+  "faqs": [
+    {
+      "id": "welcome",
+      "audience": "all",
+      "keywords": ["hello", "hi", "ayubowan", "ආයුබෝවන්", "හෙලෝ"],
+      "answer": "Hello! Welcome to UniAssist. මම UniAssist chatbot එක. ඔයාට අවශ්‍ය විශ්වවිද්‍යාල තොරතුරු ගැන ප්‍රශ්නයක් අහන්න."
+    },
+    {
+      "id": "university_admission",
+      "audience": "al",
+      "keywords": ["university admission", "how to enter university", "university apply", "විශ්වවිද්‍යාලයට ඇතුළත්", "කැම්පස් යන්න", "campus yanna"],
+      "answer": "University admission requirements depend on the admission year, degree programme and official selection rules. ශ්‍රී ලංකාවේ රාජ්‍ය විශ්වවිද්‍යාල ප්‍රවේශය සඳහා අදාළ වර්ෂයේ UGC official handbook එක පරීක්ෂා කරන්න."
+    },
+    {
+      "id": "z_score",
+      "audience": "al",
+      "keywords": ["z score", "z-score", "zscore", "ඉසෙඩ් ස්කෝර්", "z score eka"],
+      "answer": "A/L Z-score is used in university selection under the applicable admission rules. Z-score එකෙන් පමණක් ඇතුළත් වීම සහතික වෙන්නේ නැහැ. අදාළ වර්ෂයේ UGC admission handbook එකෙන් selection criteria පරීක්ෂා කරන්න."
+    },
+    {
+      "id": "degree_information",
+      "audience": "al",
+      "keywords": ["degree", "degree courses", "courses available", "උපාධි", "degree monawada", "පාඨමාලා"],
+      "answer": "Different universities offer different degree programmes. විශ්වවිද්‍යාලය, degree එක සහ අවශ්‍ය සුදුසුකම් අනුව තොරතුරු වෙනස් වෙනවා. ඔයා කැමති subject එක හෝ university එක සඳහන් කරන්න."
+    },
+    {
+      "id": "gpa",
+      "audience": "university",
+      "keywords": ["gpa", "grade point average", "gpa calculate", "ජීපීඒ", "gpa eka"],
+      "answer": "GPA means Grade Point Average. GPA එක ගණනය කරන ආකාරය university එකේ grading rules සහ course credits අනුව වෙනස් විය හැකියි. ඔයාගේ university grading system එක භාවිතා කරන්න."
+    },
+    {
+      "id": "exams",
+      "audience": "university",
+      "keywords": ["exam", "examination", "exam timetable", "විභාග", "විභාග කාලසටහන"],
+      "answer": "Exam dates and timetables are announced by each university or faculty. විභාග දිනයන් සඳහා ඔයාගේ university හෝ faculty එකේ official announcements පරීක්ෂා කරන්න."
+    },
+    {
+      "id": "assignments",
+      "audience": "university",
+      "keywords": ["assignment", "assignments", "coursework", "ඇසයින්මන්ට්", "පැවරුම්"],
+      "answer": "Assignment instructions and deadlines depend on the course and lecturer. ඔයාගේ LMS එකේ, course outline එකේ හෝ lecturer ලබාදුන් instructions වල deadline එක පරීක්ෂා කරන්න."
+    },
+    {
+      "id": "scholarship",
+      "audience": "all",
+      "keywords": ["scholarship", "financial aid", "ශිෂ්‍යත්ව", "මූල්‍යාධාර"],
+      "answer": "Scholarship eligibility and application dates depend on the scholarship programme. ශිෂ්‍යත්ව පිළිබඳ නිවැරදි තොරතුරු සඳහා අදාළ university එකේ හෝ programme එකේ official announcements බලන්න."
+    },
+    {
+      "id": "thanks",
+      "audience": "all",
+      "keywords": ["thank you", "thanks", "ස්තුතියි", "බොහොම ස්තුතියි"],
+      "answer": "You're welcome! උදව් කරන්න ලැබීම සතුටක්. තවත් ප්‍රශ්නයක් තිබේ නම් අහන්න."
+    }
+  ]
+}
