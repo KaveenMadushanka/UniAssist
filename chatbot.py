@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 
 
+# File paths
 DATA_FOLDER = Path(__file__).parent / "data"
 FAQ_FILE = DATA_FOLDER / "general_faq.json"
 UNIVERSITY_FILE = DATA_FOLDER / "university_info.json"
@@ -53,8 +54,7 @@ def normalize_text(text):
 
 
 def keyword_matches(message, keyword):
-    """Match English words and Sinhala keywords."""
-
+    """Match complete English words and Sinhala keywords."""
     message = normalize_text(message)
     keyword = normalize_text(keyword)
 
@@ -70,13 +70,12 @@ def keyword_matches(message, keyword):
         )
         return re.search(pattern, message) is not None
 
-    # Sinhala keywords are matched as text.
+    # Match Sinhala keywords as text.
     return keyword in message
 
 
 def get_audience(student_type):
     """Identify the selected student category."""
-
     student_type = normalize_text(student_type)
 
     if "a/l" in student_type or "al student" in student_type:
@@ -90,7 +89,6 @@ def get_audience(student_type):
 
 def find_university(message, selected_university, universities):
     """Find the university mentioned or selected by the user."""
-
     selected = normalize_text(selected_university)
 
     # Prefer a university explicitly mentioned in the question.
@@ -103,7 +101,6 @@ def find_university(message, selected_university, universities):
 
         aliases = [name, university_id]
 
-        # Support shorter names in user questions.
         if university_id == "sabaragamuwa":
             aliases.extend([
                 "sabaragamuwa university",
@@ -124,11 +121,14 @@ def find_university(message, selected_university, universities):
 
 def find_degree_category(message, categories):
     """Identify the degree subject area."""
-
     matches = []
 
     for category in categories:
         for keyword in category.get("keywords", []):
+            # Avoid matching the ambiguous standalone word "IT".
+            if normalize_text(keyword) == "it":
+                continue
+
             if keyword_matches(message, keyword):
                 matches.append((category, keyword))
 
@@ -142,8 +142,11 @@ def find_degree_category(message, categories):
     )[0]
 
 
-def get_response(message, student_type="General",
-                 university="General / Any University"):
+def get_response(
+    message,
+    student_type="General",
+    university="General / Any University"
+):
     """Generate a response using local FAQ and university data."""
 
     if not isinstance(message, str) or not message.strip():
@@ -160,18 +163,28 @@ def get_response(message, student_type="General",
     audience = get_audience(student_type)
 
     selected_uni = find_university(
-        message, university, universities
+        message,
+        university,
+        universities
     )
 
     # 1. Check degree subject categories.
     degree_category = find_degree_category(message, categories)
 
     if degree_category:
-        category_name = degree_category.get("name", "Degree programmes")
+        category_name = degree_category.get(
+            "name", "Degree programmes"
+        )
         description = degree_category.get("description", "")
 
-        if selected_uni:
+        # Give university-specific information only when a
+        # particular university has been identified.
+        if (
+            selected_uni
+            and selected_uni.get("id") not in ("general", "other")
+        ):
             university_name = selected_uni.get("name", "")
+
             return (
                 f"{category_name} — {university_name}\n\n"
                 f"{description}\n\n"
@@ -202,13 +215,29 @@ def get_response(message, student_type="General",
         for keyword in university_keywords
     )
 
-    if selected_uni and (
-        asks_about_university
-        or "admission" in message
-        or "degree" in message
+    asks_about_admission = (
+        "admission" in message
+        or "entry requirements" in message
+        or "university entrance" in message
+    )
+
+    asks_about_degrees = (
+        "degree" in message
+        or "degrees" in message
         or "courses" in message
+        or "course" in message
         or "පාඨමාලා" in message
         or "උපාධි" in message
+    )
+
+    if (
+        selected_uni
+        and selected_uni.get("id") not in ("general", "other")
+        and (
+            asks_about_university
+            or asks_about_admission
+            or asks_about_degrees
+        )
     ):
         return (
             f"University: {selected_uni.get('name', 'Unknown')}\n\n"
@@ -239,6 +268,7 @@ def get_response(message, student_type="General",
         )
 
         faq = best_match[0]
+
         print("Matched FAQ:", faq.get("id", "unknown"))
 
         return faq.get(

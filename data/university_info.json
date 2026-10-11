@@ -42,13 +42,14 @@
     {
       "id": "computing",
       "keywords": [
-        "computer science",
-        "computing",
-        "software engineering",
-        "information technology",
-        "IT",
-        "computer degree"
-      ],
+  "computer science",
+  "computing",
+  "software engineering",
+  "information technology",
+  "information technology degree",
+  "IT degree",
+  "computer degree"
+],
       "name": "Computing and Information Technology",
       "description": "Computing-related degree information. Available programmes and entry requirements must be checked using official university and UGC sources."
     },
