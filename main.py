@@ -6,7 +6,23 @@ from tkinter import ttk, scrolledtext
 from chatbot import get_response
 
 
+# -------------------- Conversation State --------------------
+
+conversation_context = {
+    "last_message": "",
+    "last_topic": None
+}
+
+
 # -------------------- Chat Functions --------------------
+
+def add_chat_message(message):
+    """Display a message in the chat area."""
+    chat_area.config(state="normal")
+    chat_area.insert(tk.END, message)
+    chat_area.config(state="disabled")
+    chat_area.see(tk.END)
+
 
 def open_chat():
     student_type = category.get()
@@ -23,22 +39,34 @@ def open_chat():
     home_frame.pack_forget()
     chat_frame.pack(fill="both", expand=True)
 
-    chat_area.config(state="normal")
-    chat_area.insert(
-        tk.END,
+    add_chat_message(
         f"UniAssist: Welcome! Your category: {student_type}\n"
         f"University: {university}\n\n"
         "Ask your question in English or Sinhala.\n"
         "ඔබගේ ප්‍රශ්නය English හෝ සිංහලෙන් අහන්න.\n\n"
     )
-    chat_area.config(state="disabled")
-    chat_area.see(tk.END)
 
     message_entry.focus_set()
 
 
+def is_university_follow_up(message):
+    """Check whether the message looks like a university selection."""
+    normalized = " ".join(message.casefold().split())
+
+    university_names = [
+        "university of colombo",
+        "university of moratuwa",
+        "university of peradeniya",
+        "sabaragamuwa university of sri lanka",
+        "sabaragamuwa university",
+        "sabaragamuwa campus"
+    ]
+
+    return any(name in normalized for name in university_names)
+
+
 def send_message(event=None):
-    # Read the message without the final newline
+    """Send the user message and display the chatbot response."""
     message = message_entry.get("1.0", "end-1c").strip()
 
     if not message:
@@ -46,17 +74,55 @@ def send_message(event=None):
             return "break"
         return
 
-    # Display the user's message
-    chat_area.config(state="normal")
-    chat_area.insert(tk.END, f"You: {message}\n\n")
+    add_chat_message(f"You: {message}\n\n")
 
-    # Get a response from chatbot.py
+    student_type = category.get()
+    university = university_choice.get()
+
     try:
-        response = get_response(
-            message,
-            category.get(),
-            university_choice.get()
-        )
+        # If the user names a university in a follow-up,
+        # reuse the previous topic where appropriate.
+        if (
+            is_university_follow_up(message)
+            and conversation_context["last_topic"]
+        ):
+            previous_topic = conversation_context["last_topic"]
+
+            response = get_response(
+                f"{previous_topic} {message}",
+                student_type,
+                university
+            )
+        else:
+            response = get_response(
+                message,
+                student_type,
+                university
+            )
+
+        # Store the current topic for follow-up questions.
+        lower_message = message.casefold()
+
+        topic_keywords = [
+            "computer science",
+            "computing",
+            "software engineering",
+            "information technology",
+            "engineering",
+            "management",
+            "business",
+            "science degree",
+            "degree courses",
+            "degree programme",
+            "degree programs",
+            "degree"
+        ]
+
+        if any(keyword in lower_message for keyword in topic_keywords):
+            conversation_context["last_topic"] = message
+
+        conversation_context["last_message"] = message
+
     except Exception as error:
         print("Chatbot error:", error)
         response = (
@@ -64,30 +130,23 @@ def send_message(event=None):
             "සමාවන්න, පිළිතුර ලබාගැනීමේදී දෝෂයක් ඇති වුණා."
         )
 
-    # Display the chatbot response
-    chat_area.insert(
-        tk.END,
-        f"UniAssist: {response}\n\n"
-    )
-    chat_area.config(state="disabled")
-    chat_area.see(tk.END)
+    add_chat_message(f"UniAssist: {response}\n\n")
 
-    # Clear the input box
     message_entry.delete("1.0", tk.END)
     message_entry.focus_set()
 
-    # Prevent Enter from inserting an extra newline
     if event:
         return "break"
 
 
 def insert_newline(event):
-    # Shift + Enter inserts a new line
+    """Shift + Enter inserts a new line."""
     message_entry.insert(tk.INSERT, "\n")
     return "break"
 
 
 def go_home():
+    """Return to the home screen."""
     chat_frame.pack_forget()
     home_frame.pack(fill="both", expand=True)
 
@@ -100,14 +159,12 @@ root.geometry("800x650")
 root.minsize(650, 500)
 root.configure(bg="#f1f5f9")
 
-# Set default font
 default_font = tkfont.nametofont("TkDefaultFont")
 default_font.configure(
     family="Nirmala UI",
     size=10
 )
 
-# Set text font
 text_font = tkfont.Font(
     root=root,
     family="Nirmala UI",
@@ -155,9 +212,7 @@ tk.Label(
     fg="#17365d"
 ).pack()
 
-category = tk.StringVar(
-    value="A/L Student"
-)
+category = tk.StringVar(value="A/L Student")
 
 tk.Radiobutton(
     home_frame,
@@ -322,17 +377,8 @@ message_entry.pack(
     padx=(0, 8)
 )
 
-# Enter sends the message
-message_entry.bind(
-    "<Return>",
-    send_message
-)
-
-# Shift + Enter inserts a new line
-message_entry.bind(
-    "<Shift-Return>",
-    insert_newline
-)
+message_entry.bind("<Return>", send_message)
+message_entry.bind("<Shift-Return>", insert_newline)
 
 tk.Button(
     input_frame,
