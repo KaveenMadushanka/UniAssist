@@ -1,0 +1,89 @@
+
+{
+  "universities": [
+    {
+      "id": "general",
+      "name": "General / Any University",
+      "description": "University information for students who have not selected a specific university yet.",
+      "official_source_required": true
+    },
+    {
+      "id": "colombo",
+      "name": "University of Colombo",
+      "description": "Information about degree programmes and admission requirements at the University of Colombo.",
+      "official_source_required": true
+    },
+    {
+      "id": "moratuwa",
+      "name": "University of Moratuwa",
+      "description": "Information about degree programmes and admission requirements at the University of Moratuwa.",
+      "official_source_required": true
+    },
+    {
+      "id": "peradeniya",
+      "name": "University of Peradeniya",
+      "description": "Information about degree programmes and admission requirements at the University of Peradeniya.",
+      "official_source_required": true
+    },
+    {
+      "id": "sabaragamuwa",
+      "name": "Sabaragamuwa University of Sri Lanka",
+      "description": "Information about degree programmes and admission requirements at Sabaragamuwa University of Sri Lanka.",
+      "official_source_required": true
+    },
+    {
+      "id": "other",
+      "name": "Other / Not Listed",
+      "description": "Information for students interested in another university.",
+      "official_source_required": true
+    }
+  ],
+  "degree_categories": [
+    {
+      "id": "computing",
+      "keywords": [
+        "computer science",
+        "computing",
+        "software engineering",
+        "information technology",
+        "IT",
+        "computer degree"
+      ],
+      "name": "Computing and Information Technology",
+      "description": "Computing-related degree information. Available programmes and entry requirements must be checked using official university and UGC sources."
+    },
+    {
+      "id": "engineering",
+      "keywords": [
+        "engineering",
+        "engineer",
+        "ඉංජිනේරු"
+      ],
+      "name": "Engineering",
+      "description": "Engineering degree information. Available disciplines and entry requirements vary by university and admission year."
+    },
+    {
+      "id": "management",
+      "keywords": [
+        "management",
+        "business",
+        "accounting",
+        "finance",
+        "කළමනාකරණ"
+      ],
+      "name": "Management and Business",
+      "description": "Management and business degree information. Check official sources for available programmes and admission requirements."
+    },
+    {
+      "id": "science",
+      "keywords": [
+        "science degree",
+        "biological science",
+        "physical science",
+        "විද්‍යාව"
+      ],
+      "name": "Science",
+      "description": "Science degree information. Subject combinations and admission requirements vary by programme."
+    }
+  ]
+}
