@@ -8,87 +8,143 @@
         "hello",
         "hi",
         "hey",
+        "good morning",
+        "good afternoon",
+        "good evening",
         "ayubowan",
         "ආයුබෝවන්",
         "හෙලෝ"
       ],
-      "answer": "Hello! Welcome to UniAssist. මම UniAssist chatbot එක. ඔයාට අවශ්‍ය විශ්වවිද්‍යාල තොරතුරු ගැන ප්‍රශ්නයක් අහන්න."
+      "answer": "Hello! Welcome to UniAssist.\n\nආයුබෝවන්! UniAssist වෙත සාදරයෙන් පිළිගන්නවා. ඔයාට අවශ්‍ය විශ්වවිද්‍යාල තොරතුරු ගැන මගෙන් අහන්න පුළුවන්."
     },
     {
       "id": "university_admission",
       "audience": "al",
       "keywords": [
-        "university admission",
+        "how can i enter a state university",
         "how to enter university",
-        "university apply",
+        "how can i enter university",
+        "state university admission",
+        "university admission",
         "university entrance",
-        "විශ්වවිද්‍යාලයට ඇතුළත්",
+        "university apply",
+        "how to apply for university",
+        "campus yanna",
         "කැම්පස් යන්න",
-        "campus yanna"
+        "විශ්වවිද්‍යාලයට ඇතුළත්"
       ],
-      "answer": "University admission requirements depend on the admission year, degree programme and official selection rules. ශ්‍රී ලංකාවේ රාජ්‍ය විශ්වවිද්‍යාල ප්‍රවේශය සඳහා අදාළ වර්ෂයේ UGC official handbook එක පරීක්ෂා කරන්න."
+      "answer": "ශ්‍රී ලංකාවේ රාජ්‍ය විශ්වවිද්‍යාලයකට ඇතුළත් වීමට සාමාන්‍යයෙන් G.C.E. Advanced Level (A/L) විභාගයේ ප්‍රතිඵල, අදාළ විෂය ධාරාව, Z-score සහ UGC ඇතුළත් වීමේ නියමයන් සැලකිල්ලට ගන්නවා.\n\nඔයාගේ විෂය ධාරාව සහ ප්‍රතිඵල අනුව සුදුසුකම් වෙනස් වෙනවා. නිවැරදි හා යාවත්කාලීන තොරතුරු සඳහා UGC නිල වෙබ් අඩවිය සහ Admission Handbook එක පරීක්ෂා කරන්න."
     },
     {
       "id": "z_score",
       "audience": "all",
       "keywords": [
+        "what is z score",
+        "explain z score",
+        "z score meaning",
         "z score",
         "z-score",
         "zscore",
         "ඉසෙඩ් ස්කෝර්",
         "z score eka"
       ],
-      "answer": "A/L Z-score is used in university selection under the applicable admission rules. Z-score එකෙන් පමණක් ඇතුළත් වීම සහතික වෙන්නේ නැහැ. අදාළ වර්ෂයේ UGC admission handbook එකෙන් selection criteria පරීක්ෂා කරන්න."
+      "answer": "Z-score කියන්නේ A/L ප්‍රතිඵල භාවිතයෙන් විශ්වවිද්‍යාල තේරීමේදී යොදාගන්නා මිනුමක්. එය ඔයාගේ ප්‍රතිඵල අනෙක් සිසුන්ගේ ප්‍රතිඵල සමඟ සසඳා බැලීමට උපකාරී වෙනවා.\n\nවිශ්වවිද්‍යාල තේරීමේදී Z-score එකට අමතරව අදාළ විෂය ධාරාව, පාඨමාලාවේ අවශ්‍යතා සහ UGC නියමයන් ද බලපානවා."
+    },
+    {
+      "id": "degree_selection_after_al",
+      "audience": "al",
+      "keywords": [
+        "what degrees can i select after al",
+        "degrees after al",
+        "degree selection after al",
+        "what degree should i choose",
+        "which degree is best",
+        "degree options after a level",
+        "a/l වලින් පස්සේ degree",
+        "මොන degree එකද තෝරගන්නේ"
+      ],
+      "answer": "A/L වලින් පස්සේ තෝරාගත හැකි උපාධි ඔයාගේ විෂය ධාරාව සහ ප්‍රතිඵල අනුව වෙනස් වෙනවා.\n\nඋදාහරණ ලෙස Computing, Engineering, Management සහ Science වැනි ක්ෂේත්‍ර සලකා බලන්න පුළුවන්. මේවා උදාහරණ පමණයි; සියලුම පාඨමාලා සඳහා හැම සිසුවෙකුටම සුදුසුකම් ලැබෙන්නේ නැහැ.\n\nඔයාගේ A/L විෂය ධාරාව සඳහන් කළොත් සුදුසු ක්ෂේත්‍ර ගැන තවත් පැහැදිලි කරන්න පුළුවන්."
+    },
+    {
+      "id": "degree_requirements",
+      "audience": "al",
+      "keywords": [
+        "computer science entry requirements",
+        "degree entry requirements",
+        "university entry requirements",
+        "requirements for computer science",
+        "what qualifications do i need",
+        "degree qualifications",
+        "ඇතුළත් වීමේ සුදුසුකම්"
+      ],
+      "answer": "උපාධියකට ඇතුළත් වීමේ සුදුසුකම් විශ්වවිද්‍යාලය, උපාධි පාඨමාලාව සහ අදාළ A/L විෂය ධාරාව අනුව වෙනස් වෙනවා.\n\nනිවැරදි සුදුසුකම් සඳහා අදාළ විශ්වවිද්‍යාලයේ නිල වෙබ් අඩවිය සහ UGC Admission Handbook එක පරීක්ෂා කරන්න."
+    },
+    {
+      "id": "admission_handbook",
+      "audience": "al",
+      "keywords": [
+        "where can i find admission handbook",
+        "ugc handbook",
+        "university admission handbook",
+        "admission handbook",
+        "ugc website",
+        "admission details"
+      ],
+      "answer": "විශ්වවිද්‍යාල ඇතුළත් වීමේ තොරතුරු සඳහා University Grants Commission (UGC) නිල වෙබ් අඩවියට පිවිසෙන්න:\n\nhttps://www.ugc.ac.lk/\n\nඅදාළ වර්ෂයේ Admission Handbook එක පරීක්ෂා කරලා පාඨමාලා සහ ඇතුළත් වීමේ සුදුසුකම් තහවුරු කරගන්න."
     },
     {
       "id": "degree_information",
       "audience": "all",
       "keywords": [
-        "degree",
-        "degrees",
+        "degree programmes",
+        "degree program",
         "degree courses",
         "courses available",
-        "degree programmes",
+        "available degrees",
+        "degrees",
+        "degree",
         "උපාධි",
         "degree monawada",
         "පාඨමාලා"
       ],
-      "answer": "Different universities offer different degree programmes. විශ්වවිද්‍යාලය, degree එක සහ අවශ්‍ය සුදුසුකම් අනුව තොරතුරු වෙනස් වෙනවා. ඔයා කැමති subject එක හෝ university එක සඳහන් කරන්න."
+      "answer": "විශ්වවිද්‍යාලවල Computing, Engineering, Management, Science සහ වෙනත් ක්ෂේත්‍රවල උපාධි පාඨමාලා තිබිය හැකියි.\n\nනමුත් සෑම විශ්වවිද්‍යාලයකම පාඨමාලා එකම විදිහට ලබාදෙන්නේ නැහැ. ඔයාට අවශ්‍ය විශ්වවිද්‍යාලය සඳහන් කරන්න. නිල පාඨමාලා තොරතුරු එම විශ්වවිද්‍යාලයේ වෙබ් අඩවියෙන් තහවුරු කරගන්න."
     },
     {
       "id": "gpa",
-      "audience": "all",
+      "audience": "university",
       "keywords": [
-        "gpa",
-        "grade point average",
+        "calculate my gpa",
         "gpa calculate",
         "calculate gpa",
-        "calculate my gpa",
+        "grade point average",
+        "what is gpa",
+        "gpa",
         "ජීපීඒ",
         "gpa eka"
       ],
-      "answer": "GPA means Grade Point Average. GPA එක ගණනය කරන ආකාරය university එකේ grading rules සහ course credits අනුව වෙනස් විය හැකියි. නිවැරදි ගණනයක් සඳහා ඔයාගේ university grading system එක භාවිතා කරන්න."
+      "answer": "GPA (Grade Point Average) කියන්නේ විෂයයන්වල grade points සහ ඒවායේ credits අනුව ගණනය කරන සාමාන්‍ය අගයක්.\n\nසාමාන්‍යයෙන් GPA = සියලුම විෂයයන්ගේ (Grade Point × Credit) එකතුව ÷ මුළු Credits එකතුව.\n\nඔයාගේ විශ්වවිද්‍යාලයේ GPA ගණනය කිරීමේ නියමයන් අනුව නිවැරදි ක්‍රමය තහවුරු කරගන්න."
     },
     {
       "id": "exams",
-      "audience": "all",
+      "audience": "university",
       "keywords": [
-        "exam",
-        "exams",
-        "examination",
         "exam timetable",
         "exam date",
-        "විභාග",
-        "විභාග කාලසටහන"
+        "examination",
+        "exams",
+        "exam",
+        "විභාග කාලසටහන",
+        "විභාග"
       ],
-      "answer": "Exam dates and timetables are announced by each university or faculty. විභාග දිනයන් සඳහා ඔයාගේ university හෝ faculty එකේ official announcements පරීක්ෂා කරන්න."
+      "answer": "විභාග කාලසටහන සහ විභාග දිනයන් විශ්වවිද්‍යාලය හා අධ්‍යයන වැඩසටහන අනුව වෙනස් වෙනවා.\n\nඔයාගේ විශ්වවිද්‍යාලයේ නිල වෙබ් අඩවිය, ශිෂ්‍ය ද්වාරය හෝ අදාළ අධ්‍යයන අංශයෙන් නවතම කාලසටහන ලබාගන්න."
     },
     {
       "id": "assignments",
-      "audience": "all",
+      "audience": "university",
       "keywords": [
-        "assignment",
+        "assignment deadline",
         "assignments",
+        "assignment",
         "assingment",
         "assingments",
         "assigment",
@@ -98,34 +154,34 @@
         "ඇසයින්මන්ට්",
         "පැවරුම්"
       ],
-      "answer": "Assignment instructions and deadlines depend on the course and lecturer. ඔයාගේ LMS එකේ, course outline එකේ හෝ lecturer ලබාදුන් instructions වල deadline එක පරීක්ෂා කරන්න."
+      "answer": "Assignment deadline එක එක් එක් පාඨමාලාව සහ lecturer අනුව වෙනස් වෙනවා.\n\nඔයාගේ LMS එක, course page එක හෝ lecturer ලබාදුන් උපදෙස් පරීක්ෂා කරන්න. UniAssist සතුව ඔයාගේ සැබෑ assignment deadlines නොමැති නිසා ඒවා නිල මූලාශ්‍රයකින් තහවුරු කරගන්න."
     },
     {
       "id": "scholarship",
-      "audience": "all",
+      "audience": "university",
       "keywords": [
-        "scholarship",
-        "scholarships",
         "financial aid",
-        "bursary",
         "student allowance",
+        "scholarships",
+        "scholarship",
+        "bursary",
         "ශිෂ්‍යත්ව",
         "මූල්‍යාධාර"
       ],
-      "answer": "Scholarship eligibility and application dates depend on the scholarship programme. ශිෂ්‍යත්ව පිළිබඳ නිවැරදි තොරතුරු සඳහා අදාළ university එකේ හෝ programme එකේ official announcements බලන්න."
+      "answer": "විශ්වවිද්‍යාල සිසුන්ට සුදුසුකම් අනුව ශිෂ්‍යත්ව හෝ මූල්‍යාධාර අවස්ථා තිබිය හැකියි.\n\nසුදුසුකම්, අයදුම් කරන දිනයන් සහ අවශ්‍ය ලේඛන සඳහා ඔයාගේ විශ්වවිද්‍යාලයේ නිල වෙබ් අඩවිය හෝ ශිෂ්‍ය සුබසාධන අංශය අමතන්න."
     },
     {
       "id": "thanks",
       "audience": "all",
       "keywords": [
-  "thank you",
-  "thank",
-  "thanks",
-  "thankyou",
-  "ස්තුතියි",
-  "බොහොම ස්තුතියි"
-],
-      "answer": "You're welcome! උදව් කරන්න ලැබීම සතුටක්. තවත් ප්‍රශ්නයක් තිබේ නම් අහන්න."
+        "thank you",
+        "thankyou",
+        "thanks",
+        "thank",
+        "ස්තුතියි",
+        "බොහොම ස්තුතියි"
+      ],
+      "answer": "You're welcome! ඔයාට උදව් කරන්න ලැබීම සතුටක්. තවත් ප්‍රශ්නයක් තියෙනවා නම් අහන්න."
     }
   ]
 }
