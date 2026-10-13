@@ -1,6 +1,6 @@
-
 import json
 import re
+from difflib import SequenceMatcher
 from pathlib import Path
 
 
@@ -68,7 +68,34 @@ def keyword_matches(message, keyword):
             + re.escape(keyword)
             + r"(?![a-z0-9])"
         )
-        return re.search(pattern, message) is not None
+        if re.search(pattern, message) is not None:
+            return True
+
+        # Allow small spelling mistakes in English keywords.
+        # Short words are kept exact to reduce accidental matches.
+        keyword_words = re.findall(r"[a-z0-9]+", keyword)
+        message_words = re.findall(r"[a-z0-9]+", message)
+
+        if not keyword_words or len(message_words) < len(keyword_words):
+            return False
+
+        def words_are_similar(first, second):
+            if first == second:
+                return True
+            if min(len(first), len(second)) < 4:
+                return False
+            return SequenceMatcher(None, first, second).ratio() >= 0.82
+
+        window_size = len(keyword_words)
+        for start in range(len(message_words) - window_size + 1):
+            window = message_words[start:start + window_size]
+            if all(
+                words_are_similar(expected, actual)
+                for expected, actual in zip(keyword_words, window)
+            ):
+                return True
+
+        return False
 
     # Match Sinhala keywords as text.
     return keyword in message
