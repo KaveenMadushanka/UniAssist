@@ -1,3 +1,4 @@
+
 import json
 import re
 from difflib import SequenceMatcher
@@ -211,14 +212,41 @@ def get_response(
             and selected_uni.get("id") not in ("general", "other")
         ):
             university_name = selected_uni.get("name", "")
-
-            return (
-                f"{category_name} — {university_name}\n\n"
-                f"{description}\n\n"
-                "For confirmed programmes and entry requirements, "
-                "check the university's official website and the "
-                "relevant UGC admission handbook."
+            university_id = selected_uni.get("id", "")
+            official_url = selected_uni.get("official_url", "")
+            programmes_by_category = selected_uni.get(
+                "degree_programmes", {}
             )
+            programme_list = programmes_by_category.get(
+                degree_category.get("id", ""), []
+            )
+
+            response = (
+                f"{category_name} — {university_name}\n\n"
+                f"{description}\n"
+            )
+
+            if programme_list:
+                response += "\nExamples of related programmes listed by the university:\n"
+                response += "\n".join(
+                    f"• {programme}" for programme in programme_list
+                )
+                response += (
+                    "\n\nThis list is not a guarantee of admission eligibility. "
+                    "Check the current official programme page and UGC "
+                    "admission handbook for the relevant academic year."
+                )
+            else:
+                response += (
+                    "\n\nPlease check the university's official website "
+                    "for programmes in this subject area. Admission "
+                    "requirements can change by programme and academic year."
+                )
+
+            if official_url:
+                response += f"\n\nOfficial information: {official_url}"
+
+            return response
 
         return (
             f"{category_name}\n\n"

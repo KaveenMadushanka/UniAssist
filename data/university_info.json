@@ -1,4 +1,3 @@
-
 {
   "universities": [
     {
@@ -11,25 +10,54 @@
       "id": "colombo",
       "name": "University of Colombo",
       "description": "Information about degree programmes and admission requirements at the University of Colombo.",
-      "official_source_required": true
+      "official_source_required": true,
+      "official_url": "https://cmb.ac.lk/undergraduate-programmes",
+      "degree_programmes": {
+        "computing": [
+          "BSc in Computer Science — University of Colombo School of Computing (UCSC)",
+          "BSc in Information Systems — University of Colombo School of Computing (UCSC)"
+        ]
+      }
     },
     {
       "id": "moratuwa",
       "name": "University of Moratuwa",
       "description": "Information about degree programmes and admission requirements at the University of Moratuwa.",
-      "official_source_required": true
+      "official_source_required": true,
+      "official_url": "https://uom.lk/education/degrees/undergraduate",
+      "degree_programmes": {
+        "computing": [
+          "BSc Honours in Computer Science & Engineering",
+          "BSc Honours in Information Technology",
+          "BSc Honours in Information Technology & Management",
+          "BSc Honours in Artificial Intelligence"
+        ]
+      }
     },
     {
       "id": "peradeniya",
       "name": "University of Peradeniya",
       "description": "Information about degree programmes and admission requirements at the University of Peradeniya.",
-      "official_source_required": true
+      "official_source_required": true,
+      "official_url": "https://www.pdn.ac.lk/undergraduates/",
+      "degree_programmes": {
+        "computing": [
+          "BSc (Special) in Computer Science",
+          "BSc in Computation & Management"
+        ]
+      }
     },
     {
       "id": "sabaragamuwa",
       "name": "Sabaragamuwa University of Sri Lanka",
       "description": "Information about degree programmes and admission requirements at Sabaragamuwa University of Sri Lanka.",
-      "official_source_required": true
+      "official_source_required": true,
+      "official_url": "https://www.sab.ac.lk/app/degree-programmes",
+      "degree_programmes": {
+        "computing": [
+          "BSc Honours in Computer Science and Technology"
+        ]
+      }
     },
     {
       "id": "other",
@@ -42,14 +70,14 @@
     {
       "id": "computing",
       "keywords": [
-  "computer science",
-  "computing",
-  "software engineering",
-  "information technology",
-  "information technology degree",
-  "IT degree",
-  "computer degree"
-],
+        "computer science",
+        "computing",
+        "software engineering",
+        "information technology",
+        "information technology degree",
+        "IT degree",
+        "computer degree"
+      ],
       "name": "Computing and Information Technology",
       "description": "Computing-related degree information. Available programmes and entry requirements must be checked using official university and UGC sources."
     },
