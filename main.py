@@ -387,7 +387,6 @@ chat_area = scrolledtext.ScrolledText(
     padx=20, pady=18, state="disabled", relief="flat", bd=0,
     highlightbackground=BORDER, highlightthickness=1, spacing1=3, spacing3=5
 )
-chat_area.pack(fill="both", expand=True, padx=18, pady=(0, 10))
 chat_area.tag_configure("user_label", foreground=BLUE, font=("Segoe UI", 9, "bold"), spacing1=8)
 chat_area.tag_configure("user_bubble", foreground=NAVY_DARK, background=PALE_BLUE,
                         lmargin1=10, lmargin2=10, rmargin=90, spacing1=5, spacing3=10)
@@ -415,5 +414,9 @@ message_entry.bind("<Return>", send_message)
 message_entry.bind("<Shift-Return>", insert_newline)
 make_button(input_card, "Send  ➤", send_message, bg=NAVY, active_bg=BLUE,
             font=("Segoe UI", 10, "bold"), padx=18, pady=14).pack(side="right", padx=8, pady=8)
+
+# Pack the expanding chat history LAST so the voice controls and message box
+# reserve their space at the bottom of the window on smaller displays.
+chat_area.pack(fill="both", expand=True, padx=18, pady=(0, 10))
 
 root.mainloop()
