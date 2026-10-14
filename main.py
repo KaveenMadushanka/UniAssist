@@ -2,26 +2,112 @@
 import tkinter as tk
 import tkinter.font as tkfont
 from tkinter import ttk, scrolledtext
+import threading
+import json
+import re
+
+import sounddevice as sd
+import pyttsx3
+from vosk import Model, KaldiRecognizer
 
 from chatbot import get_response
 
 
-# -------------------- Conversation State --------------------
+# -------------------- Configuration --------------------
+
+MODEL_PATH = "models/vosk-model-small-en-us-0.15"
+SAMPLE_RATE = 16000
+RECORD_SECONDS = 10
+MICROPHONE_DEVICE = 2
 
 conversation_context = {
     "last_message": "",
     "last_topic": None
 }
 
+vosk_model = None
+is_recording = False
+is_typing = False
+
 
 # -------------------- Chat Functions --------------------
 
 def add_chat_message(message):
-    """Display a message in the chat area."""
+    """Display a complete message in the chat area."""
     chat_area.config(state="normal")
     chat_area.insert(tk.END, message)
     chat_area.config(state="disabled")
     chat_area.see(tk.END)
+
+
+def typewriter_response(response):
+    """Display the chatbot response one character at a time."""
+    global is_typing
+
+    is_typing = True
+    add_chat_message("UniAssist: ")
+
+    # Start English voice output separately.
+    threading.Thread(
+        target=speak_answer,
+        args=(response,),
+        daemon=True
+    ).start()
+
+    def show_character(index=0):
+        global is_typing
+
+        if index < len(response):
+            chat_area.config(state="normal")
+            chat_area.insert(tk.END, response[index])
+            chat_area.config(state="disabled")
+            chat_area.see(tk.END)
+
+            root.after(
+                15,
+                show_character,
+                index + 1
+            )
+        else:
+            add_chat_message("\n\n")
+            is_typing = False
+            message_entry.focus_set()
+
+    show_character()
+
+
+def speak_answer(response):
+    """Read the English parts of a response aloud."""
+    try:
+        # Sinhala text is displayed but not sent to English TTS.
+        english_text = re.sub(
+            r"[\u0D80-\u0DFF]",
+            " ",
+            response
+        )
+
+        english_text = " ".join(english_text.split())
+
+        if not english_text:
+            return
+
+        engine = pyttsx3.init()
+
+        # Prefer Microsoft Zira if available.
+        voices = engine.getProperty("voices")
+
+        for voice in voices:
+            if "zira" in voice.name.casefold():
+                engine.setProperty("voice", voice.id)
+                break
+
+        engine.setProperty("rate", 165)
+        engine.say(english_text)
+        engine.runAndWait()
+        engine.stop()
+
+    except Exception as error:
+        print("Voice output error:", error)
 
 
 def open_chat():
@@ -50,7 +136,6 @@ def open_chat():
 
 
 def is_university_follow_up(message):
-    """Check whether the message looks like a university selection."""
     normalized = " ".join(message.casefold().split())
 
     university_names = [
@@ -62,17 +147,26 @@ def is_university_follow_up(message):
         "sabaragamuwa campus"
     ]
 
-    return any(name in normalized for name in university_names)
+    return any(
+        name in normalized
+        for name in university_names
+    )
 
 
 def send_message(event=None):
-    """Send the user message and display the chatbot response."""
-    message = message_entry.get("1.0", "end-1c").strip()
+    """Send a message and display the response."""
+    global is_typing
+
+    if is_typing:
+        return "break" if event else None
+
+    message = message_entry.get(
+        "1.0",
+        "end-1c"
+    ).strip()
 
     if not message:
-        if event:
-            return "break"
-        return
+        return "break" if event else None
 
     add_chat_message(f"You: {message}\n\n")
 
@@ -80,8 +174,6 @@ def send_message(event=None):
     university = university_choice.get()
 
     try:
-        # If the user names a university in a follow-up,
-        # reuse the previous topic where appropriate.
         if (
             is_university_follow_up(message)
             and conversation_context["last_topic"]
@@ -100,7 +192,6 @@ def send_message(event=None):
                 university
             )
 
-        # Store the current topic for follow-up questions.
         lower_message = message.casefold()
 
         topic_keywords = [
@@ -118,35 +209,153 @@ def send_message(event=None):
             "degree"
         ]
 
-        if any(keyword in lower_message for keyword in topic_keywords):
+        if any(
+            keyword in lower_message
+            for keyword in topic_keywords
+        ):
             conversation_context["last_topic"] = message
 
         conversation_context["last_message"] = message
 
     except Exception as error:
         print("Chatbot error:", error)
+
         response = (
             "Sorry, something went wrong while finding an answer.\n\n"
             "සමාවන්න, පිළිතුර ලබාගැනීමේදී දෝෂයක් ඇති වුණා."
         )
 
-    add_chat_message(f"UniAssist: {response}\n\n")
-
     message_entry.delete("1.0", tk.END)
-    message_entry.focus_set()
+    typewriter_response(str(response))
 
     if event:
         return "break"
 
 
 def insert_newline(event):
-    """Shift + Enter inserts a new line."""
     message_entry.insert(tk.INSERT, "\n")
     return "break"
 
 
+# -------------------- English Voice Input --------------------
+
+def start_voice_input():
+    """Record English speech in a background thread."""
+    global is_recording
+
+    if is_recording:
+        return
+
+    if is_typing:
+        voice_status_label.config(
+            text="Please wait for the current answer."
+        )
+        return
+
+    is_recording = True
+    voice_button.config(state="disabled")
+    voice_status_label.config(
+        text="Recording... Speak in English for 10 seconds."
+    )
+
+    threading.Thread(
+        target=recognize_speech,
+        daemon=True
+    ).start()
+
+
+def recognize_speech():
+    """Record audio and convert it into English text."""
+    global is_recording, vosk_model
+
+    try:
+        if vosk_model is None:
+            root.after(
+                0,
+                lambda: voice_status_label.config(
+                    text="Loading English speech model..."
+                )
+            )
+
+            vosk_model = Model(MODEL_PATH)
+
+        recognizer = KaldiRecognizer(
+            vosk_model,
+            SAMPLE_RATE
+        )
+
+        audio = sd.rec(
+            int(RECORD_SECONDS * SAMPLE_RATE),
+            samplerate=SAMPLE_RATE,
+            channels=1,
+            dtype="int16",
+            device=MICROPHONE_DEVICE
+        )
+
+        sd.wait()
+
+        audio_bytes = audio.tobytes()
+
+        if recognizer.AcceptWaveform(audio_bytes):
+            result = json.loads(recognizer.Result())
+        else:
+            result = json.loads(recognizer.FinalResult())
+
+        recognized_text = result.get("text", "").strip()
+
+        root.after(
+            0,
+            finish_voice_input,
+            recognized_text,
+            None
+        )
+
+    except Exception as error:
+        print("Speech recognition error:", error)
+
+        root.after(
+            0,
+            finish_voice_input,
+            "",
+            str(error)
+        )
+
+
+def finish_voice_input(recognized_text, error):
+    """Update the Tkinter interface after recording."""
+    global is_recording
+
+    is_recording = False
+    voice_button.config(state="normal")
+
+    if error:
+        voice_status_label.config(
+            text="Voice input failed. Check the terminal."
+        )
+        return
+
+    if recognized_text:
+        message_entry.insert(
+            tk.END,
+            recognized_text + " "
+        )
+        message_entry.focus_set()
+
+        voice_status_label.config(
+            text="Speech recognized. Check the text and press Send."
+        )
+    else:
+        voice_status_label.config(
+            text="No speech recognized. Please try again."
+        )
+
+
+# -------------------- Navigation --------------------
+
 def go_home():
-    """Return to the home screen."""
+    if is_recording or is_typing:
+        return
+
     chat_frame.pack_forget()
     home_frame.pack(fill="both", expand=True)
 
@@ -155,8 +364,8 @@ def go_home():
 
 root = tk.Tk()
 root.title("UniAssist - Student Support Chatbot")
-root.geometry("800x650")
-root.minsize(650, 500)
+root.geometry("900x700")
+root.minsize(700, 550)
 root.configure(bg="#f1f5f9")
 
 default_font = tkfont.nametofont("TkDefaultFont")
@@ -353,11 +562,10 @@ input_frame = tk.Frame(
     chat_frame,
     bg="#f1f5f9"
 )
-
 input_frame.pack(
     fill="x",
     padx=18,
-    pady=(0, 18)
+    pady=(0, 5)
 )
 
 message_entry = tk.Text(
@@ -380,8 +588,26 @@ message_entry.pack(
 message_entry.bind("<Return>", send_message)
 message_entry.bind("<Shift-Return>", insert_newline)
 
-tk.Button(
+button_frame = tk.Frame(
     input_frame,
+    bg="#f1f5f9"
+)
+button_frame.pack(side="left")
+
+voice_button = tk.Button(
+    button_frame,
+    text="Speak English",
+    command=start_voice_input,
+    bg="#0f766e",
+    fg="white",
+    font=("Segoe UI", 10, "bold"),
+    padx=10,
+    pady=8
+)
+voice_button.pack(fill="x", pady=(0, 5))
+
+tk.Button(
+    button_frame,
     text="Send",
     command=send_message,
     bg="#17365d",
@@ -389,7 +615,20 @@ tk.Button(
     font=("Segoe UI", 10, "bold"),
     padx=20,
     pady=8
-).pack(side="left")
+).pack(fill="x")
+
+voice_status_label = tk.Label(
+    chat_frame,
+    text="",
+    bg="#f1f5f9",
+    fg="#475569",
+    anchor="w"
+)
+voice_status_label.pack(
+    fill="x",
+    padx=20,
+    pady=(0, 10)
+)
 
 
 # -------------------- Run Application --------------------
