@@ -54,6 +54,24 @@ python -m pip install -r requirements.txt
 
 6. Ensure the Vosk English speech model is available in the `models` directory.
 
+### Download the Vosk Speech Recognition Model
+
+UniAssist uses the Vosk English speech recognition model for offline microphone input.
+
+1. Download the English model from the official Vosk website: https://alphacephei.com/vosk/models
+2. Download `vosk-model-small-en-us-0.15`.
+3. Extract the downloaded ZIP file.
+4. Place the extracted model folder inside the project's `models` directory.
+
+The expected folder structure is:
+
+```text
+UniAssist/
+└── models/
+    └── vosk-model-small-en-us-0.15/
+```
+
+Make sure the model folder contains the required Vosk model files before running the application.
 ## Run the Application
 
 ```bash
