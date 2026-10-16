@@ -265,7 +265,7 @@ def go_home():
 # -------------------- Main Window --------------------
 root = tk.Tk()
 root.title("UniAssist | Student Support Chatbot")
-root.geometry("1100x760")
+root.state("zoomed")
 root.minsize(780, 600)
 root.configure(bg=BG)
 
