@@ -14,6 +14,11 @@ UniAssist is an offline university student support chatbot developed using Pytho
 - Typewriter effect for chatbot responses
 - Modern graphical user interface built with Tkinter
 
+## Application Screenshot
+
+![UniAssist Main Interface](screenshots/uniassist-main_1.png)
+![UniAssist Main Interface](screenshots/uniassist-main_2.png)
+
 ## Technologies Used
 
 - Python
